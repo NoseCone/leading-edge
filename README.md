@@ -1,4 +1,5 @@
-# Flare Timing in Svelte
+# Flare Timing in Feliz
+
 ## Developing
 Work on the stylesheet `site.sass` with:
 ```bash
