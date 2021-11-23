@@ -6,3 +6,4 @@ packages
 .paket/Paket.Restore.targets
 *.map
 *.fs.js
+build

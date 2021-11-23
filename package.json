@@ -4,7 +4,8 @@
   "scripts": {
     "start": "dotnet fable watch src --sourceMaps --run vite",
     "build": "dotnet fable src --sourceMaps --run vite build",
-    "serve": "vite serve"
+    "serve": "vite serve",
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^17.0.2",
