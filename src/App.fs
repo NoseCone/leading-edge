@@ -150,10 +150,11 @@ let Router() =
         router.onUrlChanged setUrl
         router.children [
             match url with
-            | [ ] -> Components.Index()
+            | [ ] -> Html.div [ spacer; Components.Index() ]
             | [ "comp" ] ->
                 Html.div
-                    [ Components.CompHeader({| comp = comp; nominals = nominals |})
+                    [ spacer
+                    ; Components.CompHeader({| comp = comp; nominals = nominals |})
                     ; spacer
                     ; breadcrumb comp.compName
                     ; compTabs activeTab setActiveTab
@@ -187,4 +188,4 @@ let Router() =
 
 open Browser.Dom
 
-ReactDOM.render (Router(), document.getElementById "feliz")
+ReactDOM.render (Router(), (document.getElementById "feliz").parentElement)
