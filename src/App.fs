@@ -3,17 +3,13 @@ module App
 open Browser.Dom
 open Feliz
 
-[<ReactComponent>]
-let Counter () =
-    let (count, setCount) = React.useState (0)
-
-    Html.div
-        [ Html.pre count
-          Html.button [ prop.text "+"; prop.onClick (fun _ -> setCount (count + 1)) ]
-          Html.button [ prop.text "-"; prop.onClick (fun _ -> setCount (count - 1)) ]
-        ]
+type Components =
+    [<ReactComponent(import="Index", from="./Index.jsx")>]
+    static member Index () = React.imported()
 
 [<ReactComponent>]
-let App () = React.fragment [ Counter() ]
+let App () = React.fragment [
+    Components.Index()
+  ]
 
 ReactDOM.render (App(), document.getElementById "feliz")
