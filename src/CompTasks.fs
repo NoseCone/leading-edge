@@ -1,4 +1,4 @@
-module AppCompTasks
+module CompTasks
 
 open Feliz
 

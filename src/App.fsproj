@@ -4,8 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AppCompTasks.fs" />
-    <Compile Include="AppCompSettings.fs" />
+    <Compile Include="CompSettings.fs" />
+    <Compile Include="CompTasks.fs" />
+    <Compile Include="CompPilots.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />

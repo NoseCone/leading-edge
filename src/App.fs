@@ -147,8 +147,9 @@ let compTabs (tab: CompTab) (setTab: CompTab -> Unit) =
         ]
     ]
 
-open AppCompTasks
-open AppCompSettings
+open CompTasks
+open CompSettings
+open CompPilots
     
 [<ReactComponent>]
 let Router() =
@@ -157,6 +158,7 @@ let Router() =
     let (nominals, setNominals) = React.useState(Nominals.Null)
     let (taskLengths, setTaskLengths) = React.useState([])
     let (compTasks, setCompTasks) = React.useState([])
+    let (compPilots, setCompPilots) = React.useState([])
     let (activeTab, setActiveTab) = React.useState(Tasks)
     let navigateToTab = function
         | Settings -> Router.navigate "settings"
@@ -180,6 +182,10 @@ let Router() =
                     promise {
                         let! xs = getCompTasks compPrefix
                         setCompTasks xs
+                    }
+                    promise {
+                        let! xs = getCompPilots compPrefix
+                        setCompPilots xs
                     }
                     promise {
                         let! xs = getTaskLengths compPrefix
@@ -213,6 +219,7 @@ let Router() =
                     ; breadcrumb comp.compName
                     ; compTabs activeTab (fun x -> setActiveTab x; navigateToTab x)
                     ; Html.h1 "pilots page"
+                    ; pilotsTable (compTasks |> List.map (fun x -> x.taskName), compPilots)
                     ]
             | otherwise -> Html.h1 "Not found"
         ]

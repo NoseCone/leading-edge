@@ -1,8 +1,8 @@
-module AppCompSettings
+module CompSettings
 
 open Feliz
 
-let settingsTable (settings: {| giveFraction: float; earthRadius: string; earthMath: string |})= Html.table [
+let settingsTable (settings: {| giveFraction: float; earthRadius: string; earthMath: string |}) = Html.table [
         prop.className "table is-bordered"
         prop.children [
             Html.thead [
