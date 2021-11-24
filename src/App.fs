@@ -106,6 +106,8 @@ let compTabs (tab: CompTab) (setTab: CompTab -> Unit) =
         ]
     ]
 
+open AppTasks
+    
 [<ReactComponent>]
 let Router() =
     let (url, setUrl) = React.useState(Router.currentUrl())
@@ -125,6 +127,7 @@ let Router() =
                     ; spacer
                     ; breadcrumb comp.compName
                     ; compTabs activeTab setActiveTab
+                    ; AppTasks.tasks
                     ]
             | [ "comp-prefix"; StringSegment compPrefix ] ->
                 Router.navigate "comp"
