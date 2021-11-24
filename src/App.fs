@@ -38,6 +38,26 @@ type Nominals =
         ; goal = 0.0
         }
 
+type TaskLength = string
+type RawZone = { zoneName: string }
+
+type Task =
+    { taskName: string
+    ; zones: {| raw: RawZone list |}
+    ; stopped: bool option
+    ; cancelled: bool option
+    }
+
+let mkTaskRows (tasks: Task list) (taskLengths: TaskLength list) =
+    (tasks, taskLengths)
+    ||> List.map2 (fun {taskName = t; zones = zs; stopped = s; cancelled = c} d ->
+        {| taskName = t
+        ; tps = zs.raw |> List.map (fun z -> z.zoneName) |> String.concat "-"
+        ; distance = d
+        ; stopped = Option.defaultValue false s
+        ; cancelled = Option.defaultValue false c
+        |})
+
 let getComp (comp : string) : JS.Promise<Comp> = promise {
     let url = sprintf "http://%s.flaretiming.com/json/comp-input/comps.json" comp
     return! Fetch.get url
@@ -45,6 +65,16 @@ let getComp (comp : string) : JS.Promise<Comp> = promise {
 
 let getNominals (comp : string) : JS.Promise<Nominals> = promise {
     let url = sprintf "http://%s.flaretiming.com/json/comp-input/nominals.json" comp
+    return! Fetch.get url
+}
+
+let getTaskLengths (comp : string) : JS.Promise<TaskLength list> = promise {
+    let url = sprintf "http://%s.flaretiming.com/json/task-length/task-lengths.json" comp
+    return! Fetch.get url
+}
+
+let getCompTasks (comp : string) : JS.Promise<Task list> = promise {
+    let url = sprintf "http://%s.flaretiming.com/json/comp-input/tasks.json" comp
     return! Fetch.get url
 }
 
@@ -81,7 +111,6 @@ let spacer = Html.div [ prop.className "spacer" ]
 type CompTab = Settings | Tasks | Pilots
 
 let compTabs (tab: CompTab) (setTab: CompTab -> Unit) =
-    let x = seq {"is-active"}
     let isActive expected = if tab = expected then "is-active" else ""
     Html.div [
         prop.className "tabs"
@@ -113,6 +142,8 @@ let Router() =
     let (url, setUrl) = React.useState(Router.currentUrl())
     let (comp, setComp) = React.useState(Comp.Null)
     let (nominals, setNominals) = React.useState(Nominals.Null)
+    let (taskLengths, setTaskLengths) = React.useState([])
+    let (compTasks, setCompTasks) = React.useState([])
     let (activeTab, setActiveTab) = React.useState(Tasks)
     React.router [
         router.onUrlChanged setUrl
@@ -127,7 +158,7 @@ let Router() =
                     ; spacer
                     ; breadcrumb comp.compName
                     ; compTabs activeTab setActiveTab
-                    ; tasksTable
+                    ; tasksTable (mkTaskRows compTasks taskLengths)
                     ]
             | [ "comp-prefix"; StringSegment compPrefix ] ->
                 Router.navigate "comp"
@@ -139,6 +170,14 @@ let Router() =
                     promise {
                         let! nominals = getNominals compPrefix
                         setNominals nominals
+                    }
+                    promise {
+                        let! xs = getCompTasks compPrefix
+                        setCompTasks xs
+                    }
+                    promise {
+                        let! xs = getTaskLengths compPrefix
+                        setTaskLengths xs
                     }
                 ]
             | [ "settings" ] -> Html.h1 "settings page"

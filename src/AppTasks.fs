@@ -2,31 +2,31 @@ module AppTasks
 
 open Feliz
 
-let taskRow taskName tps distance stopped cancelled = Html.tr [
+let taskRow (task: {|taskName: string; tps: string; distance: string; stopped: bool; cancelled: bool|}) = Html.tr [
         Html.td "1"
         Html.td [
             prop.className "td-task-name"
-            prop.text (taskName: string)
+            prop.text task.taskName
         ]
         Html.td [
             prop.className "td-task-tps"
-            prop.text (tps: string)
+            prop.text task.tps
         ]
         Html.td [
             prop.className "td-task-dist"
-            prop.text (distance: string)
+            prop.text task.distance
         ]
         Html.td [
             prop.className "td-task-stopped"
-            prop.text (if stopped then "STOPPED" else "")
+            prop.text (if task.stopped then "STOPPED" else "")
         ]
         Html.td [
             prop.className "td-task-cancelled"
-            prop.text (if cancelled then "CANCELLED" else "")
+            prop.text (if task.cancelled then "CANCELLED" else "")
         ]
     ]
 
-let tasksTable = Html.table [
+let tasksTable (tasks: {|taskName: string; tps: string; distance: string; stopped: bool; cancelled: bool|} list)= Html.table [
         prop.classes [ "table"; "is-striped" ]
         prop.children [
             Html.thead [
@@ -54,6 +54,6 @@ let tasksTable = Html.table [
                     ]
                 ]
             ]
-            Html.tbody [ taskRow "day one" "1DALBY-JANDOW-WARRA-1DALBY" "99.561444 km" false false ]
+            Html.tbody (List.map taskRow tasks)
         ]
     ]
