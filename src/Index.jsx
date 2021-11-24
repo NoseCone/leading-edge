@@ -8,10 +8,10 @@ export const Index = () => {
             <div className="tile is-ancestor">
                 <div className="tile is-parent">
                     <article className="tile is-child notification is-light">
-                        <p className="title">Variable Geometry</p>
+                        <p className="title">Leading Edge</p>
                         <p className="subtitle">
                             Comps scored with <a href="https://flaretiming.com">Flare Timing</a> and presented with
-                            <a href="https://zaid-ajaj.github.io/Feliz/">Feliz</a>
+                            {' '}<a href="https://zaid-ajaj.github.io/Feliz/">Feliz</a>
                         </p>
                     </article>
                 </div>
