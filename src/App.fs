@@ -218,7 +218,6 @@ let Router() =
                     ; spacer
                     ; breadcrumb comp.compName
                     ; compTabs activeTab (fun x -> setActiveTab x; navigateToTab x)
-                    ; Html.h1 "pilots page"
                     ; pilotsTable (compTasks |> List.map (fun x -> x.taskName), compPilots)
                     ]
             | otherwise -> Html.h1 "Not found"
