@@ -6,6 +6,10 @@ open Feliz.Router
 open Thoth.Fetch
 
 type UtcOffset = { timeZoneMinutes: int }
+type Radius = { radius: string }
+type Give = { giveDistance: string option; giveFraction: float }
+type Earth = { sphere: Radius }
+type EarthMath = string
 
 type Comp =
     { compName: string
@@ -14,6 +18,9 @@ type Comp =
     ; from: string
     ; ``to``: string
     ; location: string
+    ; earth: Earth
+    ; earthMath: EarthMath
+    ; give: Give
     }
     static member Null =
         { compName = ""
@@ -22,6 +29,9 @@ type Comp =
         ; from = ""
         ; ``to`` = ""
         ; location = ""
+        ; earth = { sphere = {radius = "" }}
+        ; earthMath = ""
+        ; give = { giveDistance = None; giveFraction = 0.0 }
         }
     member x.compSlug = sprintf "%s to %s, %s" x.from x.``to`` x.location
 
@@ -85,8 +95,9 @@ let (|StringSegment|_|) (input: string) =
 type Components =
     [<ReactComponent(import="Index", from="./jsx/index.jsx")>]
     static member Index () = React.imported()
+
     [<ReactComponent(import="CompHeader", from="./jsx/comp-header.jsx")>]
-    static member CompHeader (props: {| comp: Comp; nominals: Nominals |}) = React.imported()
+    static member CompHeader (_: {| comp: Comp; nominals: Nominals |}) = React.imported()
 
 // SEE: https://thisfunctionaltom.github.io/Html2Feliz/
 let breadcrumb (compName: string) = Html.nav [
@@ -136,7 +147,8 @@ let compTabs (tab: CompTab) (setTab: CompTab -> Unit) =
         ]
     ]
 
-open AppTasks
+open AppCompTasks
+open AppCompSettings
     
 [<ReactComponent>]
 let Router() =
@@ -146,20 +158,14 @@ let Router() =
     let (taskLengths, setTaskLengths) = React.useState([])
     let (compTasks, setCompTasks) = React.useState([])
     let (activeTab, setActiveTab) = React.useState(Tasks)
+    let navigateToTab = function
+        | Settings -> Router.navigate "settings"
+        | Tasks -> Router.navigate "comp"
+        | Pilots -> Router.navigate "pilots"
     React.router [
         router.onUrlChanged setUrl
         router.children [
             match url with
-            | [ ] -> Html.div [ spacer; Components.Index() ]
-            | [ "comp" ] ->
-                Html.div
-                    [ spacer
-                    ; Components.CompHeader({| comp = comp; nominals = nominals |})
-                    ; spacer
-                    ; breadcrumb comp.compName
-                    ; compTabs activeTab setActiveTab
-                    ; tasksTable (mkTaskRows compTasks taskLengths)
-                    ]
             | [ "comp-prefix"; StringSegment compPrefix ] ->
                 Router.navigate "comp"
                 ignore <| Promise.Parallel [
@@ -180,8 +186,34 @@ let Router() =
                         setTaskLengths xs
                     }
                 ]
-            | [ "settings" ] -> Html.h1 "settings page"
-            | [ "pilots" ] -> Html.h1 "pilots page"
+            | [ ] -> Html.div [ spacer; Components.Index() ]
+            | [ "comp" ] ->
+                Html.div
+                    [ spacer
+                    ; Components.CompHeader({| comp = comp; nominals = nominals |})
+                    ; spacer
+                    ; breadcrumb comp.compName
+                    ; compTabs activeTab (fun x -> setActiveTab x; navigateToTab x)
+                    ; tasksTable (mkTaskRows compTasks taskLengths)
+                    ]
+            | [ "settings" ] ->
+                Html.div
+                    [ spacer
+                    ; Components.CompHeader({| comp = comp; nominals = nominals |})
+                    ; spacer
+                    ; breadcrumb comp.compName
+                    ; compTabs activeTab (fun x -> setActiveTab x; navigateToTab x)
+                    ; settingsTable ({| giveFraction = comp.give.giveFraction; earthRadius = comp.earth.sphere.radius; earthMath = comp.earthMath |})
+                    ]
+            | [ "pilots" ] ->
+                Html.div
+                    [ spacer
+                    ; Components.CompHeader({| comp = comp; nominals = nominals |})
+                    ; spacer
+                    ; breadcrumb comp.compName
+                    ; compTabs activeTab (fun x -> setActiveTab x; navigateToTab x)
+                    ; Html.h1 "pilots page"
+                    ]
             | otherwise -> Html.h1 "Not found"
         ]
     ]
