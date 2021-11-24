@@ -57,6 +57,7 @@ type Components =
     [<ReactComponent(import="CompHeader", from="./jsx/comp-header.jsx")>]
     static member CompHeader (props: {| comp: Comp; nominals: Nominals |}) = React.imported()
 
+// SEE: https://thisfunctionaltom.github.io/Html2Feliz/
 let breadcrumb (compName: string) = Html.nav [
         prop.className "breadcrumb"
         prop.children [
@@ -75,11 +76,42 @@ let breadcrumb (compName: string) = Html.nav [
         ]
     ]
 
+let spacer = Html.div [ prop.className "spacer" ]
+
+type CompTab = Settings | Tasks | Pilots
+
+let compTabs (tab: CompTab) (setTab: CompTab -> Unit) =
+    let x = seq {"is-active"}
+    let isActive expected = if tab = expected then "is-active" else ""
+    Html.div [
+        prop.className "tabs"
+        prop.children [
+            Html.ul [
+                Html.li [
+                    prop.className (isActive Settings)
+                    prop.onClick (fun _ -> setTab Settings)
+                    prop.children [ Html.a [ prop.text "Settings" ] ]
+                ]
+                Html.li [
+                    prop.className (isActive Tasks)
+                    prop.onClick (fun _ -> setTab Tasks)
+                    prop.children [ Html.a [ prop.text "Tasks" ] ]
+                ]
+                Html.li [
+                    prop.className (isActive Pilots)
+                    prop.onClick (fun _ -> setTab Pilots)
+                    prop.children [ Html.a [ prop.text "Pilots" ] ]
+                ]
+            ]
+        ]
+    ]
+
 [<ReactComponent>]
 let Router() =
     let (url, setUrl) = React.useState(Router.currentUrl())
     let (comp, setComp) = React.useState(Comp.Null)
     let (nominals, setNominals) = React.useState(Nominals.Null)
+    let (activeTab, setActiveTab) = React.useState(Tasks)
     React.router [
         router.onUrlChanged setUrl
         router.children [
@@ -90,7 +122,9 @@ let Router() =
                     [ Html.pre (sprintf "%A" comp)
                     ; Html.pre (sprintf "%A" nominals)
                     ; Components.CompHeader({| comp = comp; nominals = nominals |})
+                    ; spacer
                     ; breadcrumb comp.compName
+                    ; compTabs activeTab setActiveTab
                     ]
             | [ "comp-prefix"; StringSegment compPrefix ] ->
                 Router.navigate "comp"
