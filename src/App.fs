@@ -40,11 +40,12 @@ type Nominals =
 
 type TaskLength = string
 type RawZone = { zoneName: string }
+type Stopped = { announced: string; retroactive: string}
 
 type Task =
     { taskName: string
     ; zones: {| raw: RawZone list |}
-    ; stopped: bool option
+    ; stopped: Stopped option
     ; cancelled: bool option
     }
 
@@ -54,7 +55,7 @@ let mkTaskRows (tasks: Task list) (taskLengths: TaskLength list) =
         {| taskName = t
         ; tps = zs.raw |> List.map (fun z -> z.zoneName) |> String.concat "-"
         ; distance = d
-        ; stopped = Option.defaultValue false s
+        ; stopped = if Option.isSome s then true else false
         ; cancelled = Option.defaultValue false c
         |})
 
