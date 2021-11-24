@@ -95,7 +95,7 @@ let breadcrumb (compName: string) = Html.nav [
                 Html.li [
                     Html.a [
                         prop.href "/"
-                        prop.text "Variable Geometry (Svelte)"
+                        prop.text "Leading Edge (Feliz)"
                     ]
                 ]
                 Html.li [
@@ -152,9 +152,7 @@ let Router() =
             | [ ] -> Components.Index()
             | [ "comp" ] ->
                 Html.div
-                    [ Html.pre (sprintf "%A" comp)
-                    ; Html.pre (sprintf "%A" nominals)
-                    ; Components.CompHeader({| comp = comp; nominals = nominals |})
+                    [ Components.CompHeader({| comp = comp; nominals = nominals |})
                     ; spacer
                     ; breadcrumb comp.compName
                     ; compTabs activeTab setActiveTab
