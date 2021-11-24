@@ -57,6 +57,24 @@ type Components =
     [<ReactComponent(import="CompHeader", from="./jsx/comp-header.jsx")>]
     static member CompHeader (props: {| comp: Comp; nominals: Nominals |}) = React.imported()
 
+let breadcrumb (compName: string) = Html.nav [
+        prop.className "breadcrumb"
+        prop.children [
+            Html.ul [
+                Html.li [
+                    Html.a [
+                        prop.href "/"
+                        prop.text "Variable Geometry (Svelte)"
+                    ]
+                ]
+                Html.li [
+                    prop.className "is-active"
+                    prop.text compName
+                ]
+            ]
+        ]
+    ]
+
 [<ReactComponent>]
 let Router() =
     let (url, setUrl) = React.useState(Router.currentUrl())
@@ -72,6 +90,7 @@ let Router() =
                     [ Html.pre (sprintf "%A" comp)
                     ; Html.pre (sprintf "%A" nominals)
                     ; Components.CompHeader({| comp = comp; nominals = nominals |})
+                    ; breadcrumb comp.compName
                     ]
             | [ "comp-prefix"; StringSegment compPrefix ] ->
                 Router.navigate "comp"
