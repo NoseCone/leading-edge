@@ -2,8 +2,31 @@ module AppTasks
 
 open Feliz
 
-let tasks =
-    Html.table [
+let taskRow taskName tps distance stopped cancelled = Html.tr [
+        Html.td "1"
+        Html.td [
+            prop.className "td-task-name"
+            prop.text (taskName: string)
+        ]
+        Html.td [
+            prop.className "td-task-tps"
+            prop.text (tps: string)
+        ]
+        Html.td [
+            prop.className "td-task-dist"
+            prop.text (distance: string)
+        ]
+        Html.td [
+            prop.className "td-task-stopped"
+            prop.text (if stopped then "STOPPED" else "")
+        ]
+        Html.td [
+            prop.className "td-task-cancelled"
+            prop.text (if cancelled then "CANCELLED" else "")
+        ]
+    ]
+
+let tasksTable = Html.table [
         prop.classes [ "table"; "is-striped" ]
         prop.children [
             Html.thead [
@@ -31,112 +54,6 @@ let tasks =
                     ]
                 ]
             ]
-            Html.tbody [
-                Html.tr [
-                    Html.td "1"
-                    Html.td [
-                        prop.className "td-task-name"
-                        prop.text "day one"
-                    ]
-                    Html.td [
-                        prop.className "td-task-tps"
-                        prop.text "1DALBY-JANDOW-WARRA-1DALBY"
-                    ]
-                    Html.td [
-                        prop.className "td-task-dist"
-                        prop.text "99.561444 km"
-                    ]
-                    Html.td [
-                        prop.className "td-task-stopped"
-                    ]
-                    Html.td [
-                        prop.className "td-task-cancelled"
-                    ]
-                ]
-                Html.tr [
-                    Html.td "2"
-                    Html.td [
-                        prop.className "td-task-name"
-                        prop.text "day four T2"
-                    ]
-                    Html.td [
-                        prop.className "td-task-tps"
-                        prop.text "1DALBY-MACALI-JIMBOU-WARRA-JANDOW-BRIGAL"
-                    ]
-                    Html.td [
-                        prop.className "td-task-dist"
-                        prop.text "111.259762 km"
-                    ]
-                    Html.td [
-                        prop.className "td-task-stopped"
-                    ]
-                    Html.td [
-                        prop.className "td-task-cancelled"
-                    ]
-                ]
-                Html.tr [
-                    Html.td "3"
-                    Html.td [
-                        prop.className "td-task-name"
-                        prop.text "day five"
-                    ]
-                    Html.td [
-                        prop.className "td-task-tps"
-                        prop.text "1DALBY-BRIGAL-IRON-1DALBY"
-                    ]
-                    Html.td [
-                        prop.className "td-task-dist"
-                        prop.text "96.889354 km"
-                    ]
-                    Html.td [
-                        prop.className "td-task-stopped"
-                    ]
-                    Html.td [
-                        prop.className "td-task-cancelled"
-                    ]
-                ]
-                Html.tr [
-                    Html.td "4"
-                    Html.td [
-                        prop.className "td-task-name"
-                        prop.text "day six"
-                    ]
-                    Html.td [
-                        prop.className "td-task-tps"
-                        prop.text "1DALBY-WARRA-BELL-1DALBY"
-                    ]
-                    Html.td [
-                        prop.className "td-task-dist"
-                        prop.text "114.373717 km"
-                    ]
-                    Html.td [
-                        prop.className "td-task-stopped"
-                    ]
-                    Html.td [
-                        prop.className "td-task-cancelled"
-                    ]
-                ]
-                Html.tr [
-                    Html.td "5"
-                    Html.td [
-                        prop.className "td-task-name"
-                        prop.text "day seven"
-                    ]
-                    Html.td [
-                        prop.className "td-task-tps"
-                        prop.text "1DALBY-BROADW-JIMBOU-MACALI-1DALBY"
-                    ]
-                    Html.td [
-                        prop.className "td-task-dist"
-                        prop.text "88.969527 km"
-                    ]
-                    Html.td [
-                        prop.className "td-task-stopped"
-                    ]
-                    Html.td [
-                        prop.className "td-task-cancelled"
-                    ]
-                ]
-            ]
+            Html.tbody [ taskRow "day one" "1DALBY-JANDOW-WARRA-1DALBY" "99.561444 km" false false ]
         ]
     ]

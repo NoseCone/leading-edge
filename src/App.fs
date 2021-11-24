@@ -127,7 +127,7 @@ let Router() =
                     ; spacer
                     ; breadcrumb comp.compName
                     ; compTabs activeTab setActiveTab
-                    ; AppTasks.tasks
+                    ; tasksTable
                     ]
             | [ "comp-prefix"; StringSegment compPrefix ] ->
                 Router.navigate "comp"
