@@ -60,7 +60,6 @@ type Components =
 [<ReactComponent>]
 let Router() =
     let (url, setUrl) = React.useState(Router.currentUrl())
-    let (compPrefix, setCompPrefix) = React.useState("2017-dalby")
     let (comp, setComp) = React.useState(Comp.Null)
     let (nominals, setNominals) = React.useState(Nominals.Null)
     React.router [
@@ -75,7 +74,6 @@ let Router() =
                     ; Components.CompHeader({| comp = comp; nominals = nominals |})
                     ]
             | [ "comp-prefix"; StringSegment compPrefix ] ->
-                setCompPrefix compPrefix
                 Router.navigate "comp"
                 ignore <| Promise.Parallel [
                     promise {
