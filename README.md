@@ -1,5 +1,11 @@
 # Flare Timing in Feliz
 
+Before developing or building for deployment run:
+```
+> dotnet tool restore
+> dotnet paket install
+```
+
 ## Developing
 Work on the stylesheet `site.sass` with:
 ```bash
@@ -18,11 +24,12 @@ Build the stylesheet `site.css` with:
 > cd src
 > sass site.sass:site.css --load-path ../node_modules
 ```
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
+
+Build for deployment with:
 ```bash
 npm run build
 ```
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+> You can preview the built app with `npm run preview`. This should _not_ be used to serve your app in production.
 ## Publishing
 Build on branch `develop`, switch to branch `main` and then copy the build to the root, commit and push.
 ```bash
