@@ -1,4 +1,5 @@
 group Client
-    FSharp.Core
-    Fable.Core
-    Feliz
+FSharp.Core
+Fable.Core
+Feliz
+Feliz.Router

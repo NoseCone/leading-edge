@@ -3,6 +3,7 @@ group Client
     source https://api.nuget.org/v3/index.json
 
 nuget Feliz
+nuget Feliz.Router
     nuget FSharp.Core
     nuget Fable.Browser.Dom
     nuget Fable.Core
