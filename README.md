@@ -1,4 +1,4 @@
-# Flare Timing in Feliz
+# Nose Cone in Feliz
 
 Before developing or building for deployment run:
 ```
