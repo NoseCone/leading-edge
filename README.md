@@ -1,4 +1,4 @@
-# Nose Cone in Feliz
+# Feliz Nose Cone
 
 Before developing or building for deployment run:
 ```
